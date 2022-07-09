@@ -1,6 +1,8 @@
 ﻿const express = require('express');
 const router = express.Router();
 const userService = require('./user.service');
+// const userAuthService = require('../userAuth/userAuth.service');
+// const companyService = require('../company/company.service');
 
 // routes
 router.post('/authenticate', authenticate);
@@ -20,8 +22,11 @@ function authenticate(req, res, next) {
 }
 
 function register(req, res, next) {
+    // console.log("user", req.body)
     userService.create(req.body)
-        .then(() => res.json({}))
+        .then(() => res.json({
+            // console("here is response", res);
+        }))
         .catch(err => next(err));
 }
 
@@ -29,6 +34,9 @@ function getAll(req, res, next) {
     userService.getAll()
         .then(users => res.json(users))
         .catch(err => next(err));
+    // companyService.getAll()
+    // .then(company => res.json(company))
+    // .catch(err => next(err));
 }
 
 function getCurrent(req, res, next) {

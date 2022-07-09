@@ -1,0 +1,30 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+
+const auditschema = new Schema([{
+    id:{ type: String, required: true }, //userid
+    createdBy:{type: String},
+    createdDate: { type: Date, default: Date.now },
+    modifiedBy:{type: String}, //array
+    modifiedDate: { type: Date, default: Date.now },
+    previousStatus:{type: String},
+    previousStatusDate: { type: Date, default: Date.now },
+    currentStatus:{type: String},
+    currentStatusDate: { type: Date, default: Date.now },
+    processCode:{type: String},
+    changeByProcessId:{type: String},
+    isActive: {type: Boolean, default: true}
+}]);
+
+
+auditschema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.hash;
+    }
+});
+
+module.exports = mongoose.model('Audit', auditschema);

@@ -1,8 +1,14 @@
-﻿const config = require('config.json');
+﻿const mongoose = require('mongoose');
+const config = require('config.json');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+// const mongo = require('mongodb'),
+// ObjectID = mongo.ObjectID;
 const db = require('_helpers/db');
 const User = db.User;
+const UserAuth= db.UserAuth;
+const Company= db.Company;
+const {registerAuth} = require('../userAuth/userAuth.controller')
 
 module.exports = {
     authenticate,
@@ -25,7 +31,14 @@ async function authenticate({ username, password }) {
 }
 
 async function getAll() {
+    // let User = {};
     return await User.find();
+    // await Company.find();
+    //  User= await User.find();
+    //  User.companies= await Company.find();
+
+    // return User;
+
 }
 
 async function getById(id) {
@@ -33,12 +46,15 @@ async function getById(id) {
 }
 
 async function create(userParam) {
+    // console.log("user service", userParam)
     // validate
     if (await User.findOne({ username: userParam.username })) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
-
     const user = new User(userParam);
+    user.id= mongoose.Types.ObjectId();
+    // console.log("user=>", user)
+    
 
     // hash password
     if (userParam.password) {
@@ -47,6 +63,12 @@ async function create(userParam) {
 
     // save user
     await user.save();
+    console.log("user=>", user.id, userParam.role)
+    registerAuth({
+        'user_id': user.id,
+        'accessLevel': userParam.role
+    });
+   
 }
 
 async function update(id, userParam) {

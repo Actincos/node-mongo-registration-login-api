@@ -15,7 +15,12 @@ app.use(jwt());
 
 // api routes
 app.use('/users', require('./users/users.controller'));
-
+app.use('/company', require('./company/company.controller'));
+app.use('/branches', require('./branches/branches.controller'));
+app.use('/department', require('./departments/departments.controller'));
+app.use('/businessService', require('./businessServices/businessService.controller'));
+app.use('/companyProcess', require('./companyProcess/companyProcess.controller'));
+// app.use('/comEmployes', require('./companyEmployes/companyEmployes.controller'));
 // global error handler
 app.use(errorHandler);
 
